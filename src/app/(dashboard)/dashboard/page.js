@@ -1,339 +1,89 @@
+"use client"
 import React from 'react'
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
-import {
-    File,
-    Home,
-    LineChart,
-    ListFilter,
-    Package,
-    Package2,
-    PanelLeft,
-    Search,
-    ShoppingCart,
-    Users2,
-} from "lucide-react"
+import { BookOpenCheck, CirclePlus, Contact, Eye, MessageSquareWarning, ShieldCheck, SquareActivity, Users, Wallet } from "lucide-react"
+import DashboardCard from '../common/DashboardCard'
+import RecentActivityFeed from '../components/RecentActivityFeed'
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
 const page = () => {
+
+  const mockActivities = [
+    { description: 'John Doe booked a flight to Paris', timestamp: '2024-07-08 10:00 AM', icon: SquareActivity },
+    { description: 'New user registered', timestamp: '2024-07-08 09:00 AM', icon: SquareActivity },
+    { description: 'Jane Smith left a 5-star review for a hotel in Rome', timestamp: '2024-07-08 08:00 AM', icon: SquareActivity },
+    { description: 'Jane Smith left a 5-star review for a hotel in Rome', timestamp: '2024-07-08 08:00 AM', icon: SquareActivity },
+    { description: 'Jane Smith left a 5-star review for a hotel in Rome', timestamp: '2024-07-08 08:00 AM', icon: SquareActivity },
+    { description: 'Jane Smith left a 5-star review for a hotel in Rome', timestamp: '2024-07-08 08:00 AM', icon: SquareActivity },
+  ];
+  const cardData = [
+    { icon: SquareActivity, title: "Total Activities", value: "1,329", progress: 25, path: '/activities' },
+    { icon: BookOpenCheck, title: "Total Bookings", value: "1,329", progress: 25, path: '/bookings' },
+    { icon: Users, title: "Total Users", value: "1,329", progress: 25, path: '/users' },
+    { icon: ShieldCheck, title: "Total Revenue", value: "1,329", progress: 25, path: '/wallet' },
+    { icon: Wallet, title: "Wallet Balance", value: "1,329", progress: 25, path: '/wallet' },
+  ]
+  const QuickLinks = [
+    { icon: CirclePlus, title: "Add Activity", path: '/addNewActivity' },
+    { icon: Eye, title: "View Bookings", path: '/bookings' },
+    { icon: Contact, title: "Manage Users", path: '/users' },
+    { icon: MessageSquareWarning, title: "Generate Report", path: '/wallet' },
+  ]
   return (
-
-      <div className="grid  auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-          <Card x-chunk="dashboard-05-chunk-1">
-            <CardHeader className="pb-2">
-              <CardDescription>This Week</CardDescription>
-              <CardTitle className="text-4xl">$1,329</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-foreground">
-                +25% from last week
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={25} aria-label="25% increase" />
-            </CardFooter>
-          </Card>
-          <Card x-chunk="dashboard-05-chunk-2">
-            <CardHeader className="pb-2">
-              <CardDescription>This Month</CardDescription>
-              <CardTitle className="text-4xl">$5,329</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-foreground">
-                +10% from last month
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={12} aria-label="12% increase" />
-            </CardFooter>
-          </Card>
-          <Card x-chunk="dashboard-05-chunk-2">
-            <CardHeader className="pb-2">
-              <CardDescription>This Month</CardDescription>
-              <CardTitle className="text-4xl">$5,329</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-xs text-muted-foreground">
-                +10% from last month
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Progress value={12} aria-label="12% increase" />
-            </CardFooter>
-          </Card>
-        </div>
-        <Tabs defaultValue="week">
-          <div className="flex items-center">
-            <TabsList>
-              <TabsTrigger value="week">Week</TabsTrigger>
-              <TabsTrigger value="month">Month</TabsTrigger>
-              <TabsTrigger value="year">Year</TabsTrigger>
-            </TabsList>
-            <div className="ml-auto flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 gap-1 text-sm"
-                  >
-                    <ListFilter className="h-3.5 w-3.5" />
-                    <span className="sr-only sm:not-sr-only">Filter</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked>
-                    Fulfilled
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>
-                    Declined
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>
-                    Refunded
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button
-                size="sm"
-                variant="outline"
-                className="h-7 gap-1 text-sm"
-              >
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only">Export</span>
-              </Button>
-            </div>
-          </div>
-          <TabsContent value="week">
-            <Card x-chunk="dashboard-05-chunk-3">
-              <CardHeader className="px-7">
-                <CardTitle>Orders</CardTitle>
-                <CardDescription>
-                  Recent orders from your store.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Type
-                      </TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Status
-                      </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Date
-                      </TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow className="bg-accent">
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Noah Williams</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          noah@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Subscription
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-25
-                      </TableCell>
-                      <TableCell className="text-right">$350.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Liam Johnson</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          liam@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-23
-                      </TableCell>
-                      <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Olivia Smith</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          olivia@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Refund
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="outline">
-                          Declined
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-24
-                      </TableCell>
-                      <TableCell className="text-right">$150.00</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>
-                        <div className="font-medium">Emma Brown</div>
-                        <div className="hidden text-sm text-muted-foreground md:inline">
-                          emma@example.com
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        Sale
-                      </TableCell>
-                      <TableCell className="hidden sm:table-cell">
-                        <Badge className="text-xs" variant="secondary">
-                          Fulfilled
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        2023-06-26
-                      </TableCell>
-                      <TableCell className="text-right">$450.00</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+    <div className="grid  items-start gap-4 md:gap-8 lg:col-span-2">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-2 xl:grid-cols-5">
+        {cardData.map((data, index) => (
+          <DashboardCard
+            key={index}
+            icon={data.icon}
+            title={data.title}
+            value={data.value}
+            progress={data.progress}
+            path={data.path}
+            progressBar={true}
+          />
+        ))}
       </div>
+      <div className="mt-2 p-6 bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+        {mockActivities.map((data, index) => (
+          <RecentActivityFeed
+            key={index}
+            icon={data.icon}
+            description={data.description}
+            timestamp={data.timestamp}
+            
+          />
+        ))}
+        <div className="flex justify-between items-center mt-6">
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-gray-700">
+          </span>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
 
-
+      </div>
+      <h2 className="text-2xl font-semibold mt-3">Quick Links</h2>
+      <div className="grid gap-4 mb-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+        {QuickLinks.map((data, index) => (
+          <DashboardCard
+            progressBar={false}
+            key={index}
+            icon={data.icon}
+            title={data.title}
+            value={data.value}
+            progress={data.progress}
+            path={data.path}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 

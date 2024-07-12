@@ -25,8 +25,8 @@ export const PUT = async (req, { params }) => {
     try {
         await connect();
         const { id } = params;
-        const body = await req.json();  
-        const { title, thumbnail, description, image, price, details, location, packages, status } = body;
+        const body = await req.json();
+        const { title, thumbnail, description, image, price, details, location, packages, status, category } = body;
         const updateFields = {
             title,
             thumbnail,
@@ -36,10 +36,9 @@ export const PUT = async (req, { params }) => {
             details,
             location,
             packages,
-            status
+            status,
+            category
         };
-
-        // Remove undefined fields from updateFields
         Object.keys(updateFields).forEach(key => updateFields[key] === undefined && delete updateFields[key]);
 
         const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, { new: true });
@@ -60,7 +59,7 @@ export const PUT = async (req, { params }) => {
 export const DELETE = async (req, { params }) => {
     try {
         const { id } = params;
-        await connect(); 
+        await connect();
 
         const deletedProduct = await Product.findByIdAndDelete(id);
 

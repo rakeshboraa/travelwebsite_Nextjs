@@ -4,9 +4,9 @@ import React from 'react'
 const CommonFromHeader = ({ title, description }) => {
     return (
         <CardHeader>
-            <CardTitle>Products</CardTitle>
+            <CardTitle>{title}</CardTitle>
             <CardDescription>
-                Manage your products and view their sales performance.
+                {description}
             </CardDescription>
         </CardHeader>
     )

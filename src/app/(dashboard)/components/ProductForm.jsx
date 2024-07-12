@@ -15,12 +15,12 @@ import MessageFrom from "../common/MessageFrom"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 const ProductForm = ({ product, mode, product_id }) => {
     const router = useRouter();
-
     const handleBack = () => {
-        router.back(); // This function navigates back to the previous page in the router's history
+        router.back();
     };
     const isEditMode = mode === 'edit';
     const [title, setTitle] = useState(isEditMode ? product.title : '');
@@ -51,8 +51,26 @@ const ProductForm = ({ product, mode, product_id }) => {
     const [messageText, setMessageText] = useState('');
     const [messageType, setMessageType] = useState('');
     const [status, setStatus] = useState(isEditMode ? product.status : 'draft');
+    const [categories, setCategories] = useState(isEditMode ? product.category : 'Select Category');
     const [loading, setLoading] = useState(false);
     const [thumbnailPic, setThumbnailPic] = useState(isEditMode ? product.thumbnail : null);
+    const [Products, setProducts] = useState([]);
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch('/api/categories')
+            if (!response.ok) {
+                throw new Error('Network response was not ok')
+            }
+            const data = await response.json()
+            setProducts(data)
+        } catch (error) {
+            console.error('Fetch error:', error)
+        } finally {
+        }
+    }
+    useEffect(() => {
+        fetchProducts()
+    }, [])
     const handleThumbnailChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -234,6 +252,7 @@ const ProductForm = ({ product, mode, product_id }) => {
 
 
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -250,7 +269,8 @@ const ProductForm = ({ product, mode, product_id }) => {
             packages,
             thumbnail: thumbnailPic,
             image: media,
-            status
+            status,
+            category: categories
         };
 
         try {
@@ -261,12 +281,16 @@ const ProductForm = ({ product, mode, product_id }) => {
                 },
                 body: JSON.stringify(product),
             });
-
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
-            // Reset form fields only when adding a new product
+            setMessageText(isEditMode ? 'Product updated successfully!' : 'Product added successfully!');
+            setShowMessage(true);
+            setMessageType('success');
+            setTimeout(() => {
+                router.push('/dashboard/products');
+            }, 1000);
+            
             if (!isEditMode) {
                 setTitle('');
                 setDescription('');
@@ -293,20 +317,16 @@ const ProductForm = ({ product, mode, product_id }) => {
                 ]);
                 setMedia([]);
             }
-
-            setMessageText(isEditMode ? 'Product updated successfully!' : 'Product added successfully!');
-            setShowMessage(true);
-            setMessageType('success');
         } catch (error) {
             console.error('Error:', error);
             setMessageText(isEditMode ? 'Failed to update product. Please try again.' : 'Failed to add product. Please try again.');
             setShowMessage(true);
             setMessageType('error');
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
+
 
     const handleAddTime = (index) => {
         const newPackages = [...packages];
@@ -322,7 +342,7 @@ const ProductForm = ({ product, mode, product_id }) => {
                 endTime: timePair[1]
             }));
         } else if (field === 'dates') {
-            newPackages[index].dates = value.map(date => date.format("YYYY-MM-DD"));  // Format dates if needed
+            newPackages[index].dates = value.map(date => date.format("YYYY-MM-DD"));
         } else {
             newPackages[index][field] = value;
         }
@@ -348,6 +368,7 @@ const ProductForm = ({ product, mode, product_id }) => {
                     <div className="loader"></div>
                 </div>
             )}
+
             {showMessage && <MessageFrom message={messageText} onClose={closeMessage} type={messageType} />}
             <FormHeader back={handleBack} handleButton={handleSubmit} handleDis={handleDiscard} mode={mode} />
             <form onSubmit={handleSubmit}>
@@ -382,7 +403,7 @@ const ProductForm = ({ product, mode, product_id }) => {
                         </Card>
                         <Card x-chunk="dashboard-07-chunk-0">
                             <CardContent>
-                                <div className="grid gap-6 sm:grid-cols-3 mt-4">
+                                <div className="grid gap-6 sm:grid-cols-3 mt-4 w-full">
                                     <div className="grid gap-3">
                                         <Label htmlFor="category">Status</Label>
                                         <Select onValueChange={setStatus} value={status}>
@@ -401,6 +422,32 @@ const ProductForm = ({ product, mode, product_id }) => {
                                             </SelectContent>
                                         </Select>
                                     </div>
+                                    <div className="flex gap-3 w-full justify-center items-center">
+                                        <div className="grid gap-3 w-full">
+                                            <Label htmlFor="category">Category</Label>
+                                            <Select onValueChange={setCategories} value={categories}>
+                                                <SelectTrigger
+                                                    id="category"
+                                                    aria-label="Select category"
+                                                >
+                                                    <SelectValue placeholder="Select status" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {Products?.map((e) => (
+                                                        <>
+                                                            <SelectItem value={e._id}>{e.title}</SelectItem>
+                                                        </>
+                                                    ))}
+
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <Link className="mt-7" href="/dashboard/addCategory">
+                                         <Button>
+                                            Add Category
+                                         </Button>
+                                        </Link>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
@@ -415,7 +462,6 @@ const ProductForm = ({ product, mode, product_id }) => {
                                 />
                             </CardContent>
                         </Card>
-
                     </div>
                     <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                         <Card x-chunk="dashboard-07-chunk-0">
@@ -463,7 +509,6 @@ const ProductForm = ({ product, mode, product_id }) => {
                                                 handlePackageChange={handlePackageChange}
                                             />
                                         </Card>
-
                                     </div>
                                 </CardContent>
                             </Card>

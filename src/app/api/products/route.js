@@ -3,17 +3,28 @@ import Product from '../../modals/product';
 import { NextResponse } from 'next/server'
 
 export const GET = async (req) => {
-    try {
-        await connect()
-        const ProductData = await Product.find()
-        return new NextResponse(JSON.stringify(ProductData), {
-            status: 200
-        })
-    } catch (error) {
-        console.error('Database Error:', error)
-        return new NextResponse('Database Error', { status: 500 })
-    }
-}
+  try {
+      await connect();
+      const { searchParams } = new URL(req.url);
+      const category = searchParams.get('category');
+
+      if (category) {
+          const products = await Product.find({ category });
+          const count = products.length;
+          return new NextResponse(JSON.stringify({ count, products }), {
+              status: 200
+          });
+      } else {
+          const ProductData = await Product.find();
+          return new NextResponse(JSON.stringify(ProductData), {
+              status: 200
+          });
+      }
+  } catch (error) {
+      console.error('Database Error:', error);
+      return new NextResponse('Database Error', { status: 500 });
+  }
+};
 
 export const POST = async (req) => {
     try {

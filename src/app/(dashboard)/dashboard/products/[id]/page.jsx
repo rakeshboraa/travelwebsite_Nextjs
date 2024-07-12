@@ -11,7 +11,7 @@ const EditProductPage = ({ params }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${id}`); // Replace with your API endpoint
+        const response = await fetch(`/api/products/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch product');
         }

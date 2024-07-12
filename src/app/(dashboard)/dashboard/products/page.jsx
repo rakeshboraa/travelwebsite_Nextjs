@@ -1,53 +1,22 @@
-'use client'
-import Image from "next/image"
-import Link from "next/link"
-import { MoreHorizontal } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import React, { useEffect, useState } from 'react'
-import FilterFirst from "../../common/FilterFirst"
 import CommonFromHeader from "../../common/CommonFromHeader"
 import MessageFrom from "../../common/MessageFrom"
+import ProductsButtons from "../../common/ProductsButtons"
+import ConfirmationPopup from "../../common/ConfirmationPopup"
+import TableFilter from "../../common/TableFilter"
+import TableHeadDash from "../../common/TableHeadDash"
+import TableBodyCommon from "../../common/TableBodyCommon"
+import { Table } from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
 
 const Loader = () => (
   <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
     <div className="loader"></div>
   </div>
 )
-
-const ConfirmationPopup = ({ isOpen, onClose, onConfirm, isLoading }) => {
-  if (!isOpen) return null
-  return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
-        <p className="mb-6">Are you sure you want to delete this product?</p>
-        <div className="flex justify-end space-x-4">
-          <Button onClick={onClose} variant="secondary" disabled={isLoading}>Cancel</Button>
-          <Button onClick={onConfirm} variant="destructive" disabled={isLoading}>
-            {isLoading ? 'Deleting...' : 'Delete'}
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 const Page = () => {
 
@@ -58,6 +27,8 @@ const Page = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [messageType, setMessageType] = useState('');
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchProducts = async () => {
     try {
@@ -115,77 +86,44 @@ const Page = () => {
     setSuccessMessage('');
   };
 
+  const filteredProducts = products.filter(product => {
+    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
+    if (activeTab === 'all') {
+      return matchesSearch;
+    } else {
+      return product.status === activeTab && matchesSearch;
+    }
+  });
+
+  const TabFilterList = ['all', 'active', 'inactive', 'draft', 'archived']
+  const TabHeaderList = ['Name', 'Status', 'Price', 'Total Sales', 'Created at']
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       {loading && <Loader />}
       {successMessage && <MessageFrom message={successMessage} onClose={closeMessage} type={messageType} />}
+
       <div className="flex items-center">
-        <FilterFirst />
+        <TableFilter TabFilterList={TabFilterList} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <ProductsButtons title="Add Product" path='/addProducts' />
       </div>
+
+        <Input
+          type="text"
+          placeholder="Search products"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="mb-4 p-2 border border-gray-300 rounded"
+        />
       <Card>
-        <CommonFromHeader />
+        <CommonFromHeader title='Products' description='Manage Your Products' />
         <CardContent>
-          {products.length === 0 && !loading ? (
+          {filteredProducts.length === 0 && !loading ? (
             <div className="text-center p-4">No products are available.</div>
           ) : (
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="hidden w-[100px] sm:table-cell">
-                    <span className="sr-only">Image</span>
-                  </TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="hidden md:table-cell">Price</TableHead>
-                  <TableHead className="hidden md:table-cell">Total Sales</TableHead>
-                  <TableHead className="hidden md:table-cell">Created at</TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-
-              <TableBody>
-                {products.map((product) => (
-                  <TableRow key={product._id}>
-                    <TableCell className="hidden sm:table-cell">
-                      <Image
-                        alt="Product image"
-                        className="aspect-square rounded-full object-cover"
-                        height="64"
-                        src={product.thumbnail}
-                        width="64"
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">{product.title}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{product.status}</Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">{`${product.price}`}</TableCell>
-                    <TableCell className="hidden md:table-cell">25</TableCell>
-                    <TableCell className="hidden md:table-cell">2023-07-12 10:42 AM</TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button aria-haspopup="true" size="icon" variant="ghost">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <Link href={`/dashboard/products/${product._id}`}>
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                          </Link>
-                          <DropdownMenuItem onClick={() => handleDeleteClick(product)}>
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              <TableHeadDash TabHeaderList={TabHeaderList} />
+              <TableBodyCommon title='products' filteredProducts={filteredProducts} handleDeleteClick={handleDeleteClick} />
             </Table>
           )}
         </CardContent>
@@ -196,8 +134,9 @@ const Page = () => {
         onConfirm={handleConfirmDelete}
         isLoading={isLoading}
       />
+      
     </main>
   )
 }
 
-export default Page
+export default Page;

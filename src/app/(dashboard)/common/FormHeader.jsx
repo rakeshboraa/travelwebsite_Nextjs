@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
 import React from 'react'
 
-const FormHeader = ({ handleButton, mode, handleDis, back }) => {
+const FormHeader = ({ handleButton, mode, handleDis, back,title }) => {
     return (
         <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" className="h-7 w-7" onClick={back}>
@@ -10,7 +10,7 @@ const FormHeader = ({ handleButton, mode, handleDis, back }) => {
                 <span className="sr-only">Back</span>
             </Button>
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                {`${mode === 'edit' ? 'Edit Product' : 'Add Product'}`}
+                {title}
             </h1>
             <div className="hidden items-center gap-2 md:ml-auto md:flex">
                 <Button size="sm" onClick={handleDis}>
