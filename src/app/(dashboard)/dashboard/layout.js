@@ -1,7 +1,6 @@
-
 import Sidenav from "../components/Sidenav";
 import Header from "../components/Header";
-
+import { Toaster } from "@/components/ui/toaster"
 export const metadata = {
     title: 'Do Join Dashboard',
     description: 'Basic dashboard '
@@ -16,10 +15,10 @@ export default function DashboardLayout({
             <div className="flex gap-8">
                 <Sidenav />
                 <div className="w-full mx-12 my-6 auto-rows-max">
-                {children}
+                    {children}
                 </div>
             </div>
-
+            <Toaster />
         </div>
     );
 }

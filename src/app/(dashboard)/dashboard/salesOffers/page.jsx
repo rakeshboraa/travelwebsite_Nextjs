@@ -34,7 +34,7 @@ const Page = () => {
   ]
   
   return (
-      <ListLayout  tableTitle='sales' TableBodyData={TableBodyData} TabHeaderList={TabHeaderList} headerTitle="Sales Offers" headerbuttontitle="Add New Sales Offer" path="addSalesOffers" />
+      <ListLayout  tableTitle='salesOffers' TableBodyData={TableBodyData} TabHeaderList={TabHeaderList} headerTitle="Sales Offers" headerbuttontitle="Add New Sales Offer" path="addSalesOffers" />
   )
 }
 

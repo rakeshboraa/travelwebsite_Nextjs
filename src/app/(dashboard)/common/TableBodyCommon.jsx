@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const tableConfig = {
-    combooffer: [
+    comboOffers: [
         { key: 'image', type: 'image' },
         { key: 'title', type: 'text' },
         { key: 'includedActivities', type: 'text' },
@@ -30,7 +30,7 @@ const tableConfig = {
         { key: 'location', type: 'text' },
         { key: 'status', type: 'text' }
     ],
-    sales: [
+    salesOffers: [
         { key: 'title', type: 'text' },
         { key: 'description', type: 'text' },
         { key: 'discount', type: 'text' },
@@ -46,7 +46,7 @@ const tableConfig = {
         { key: 'price', type: 'text' },
         { key: 'status', type: 'text' }
     ],
-    user: [
+    users: [
         { key: 'name', type: 'text' },
         { key: 'email', type: 'text' },
         { key: 'role', type: 'text' },
@@ -69,15 +69,13 @@ const tableConfig = {
         { key: 'publication_date', type: 'text' },
         { key: 'status', type: 'text' }
     ],
-    categories: [
+    category: [
         { key: 'name', type: 'text' },
         { key: 'description', type: 'text' },
         { key: 'slug', type: 'text' },
     ]
 };
-
-const TableBodyCommon = ({ filteredProducts, handleDeleteClick, tableTitle, }) => {
-
+const TableBodyCommon = ({ filteredProducts, tableTitle, onDeleteClick }) => {
     const renderCellContent = (product, column) => {
         if (column.type === 'image') {
             return (
@@ -95,38 +93,39 @@ const TableBodyCommon = ({ filteredProducts, handleDeleteClick, tableTitle, }) =
     };
 
     return (
-        <TableBody>
-            {filteredProducts?.map((product) => (
-                <TableRow key={product._id} className="capitalize">
-                    {tableConfig[tableTitle]?.map((column) => (
-                        <TableCell key={column.key} className="hidden md:table-cell  capitalize">
-                            <Link href={`/dashboard/${tableTitle}/view/1`}>
-                                {renderCellContent(product, column)}
-                            </Link>
-                        </TableCell>
-                    ))}
-                    <TableCell>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">Toggle menu</span>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                <Link href={`/dashboard/${tableTitle}/1`}>
-                                    <DropdownMenuItem>Edit</DropdownMenuItem>
+        <>
+            <TableBody className="h-[40vh]">
+                {filteredProducts?.map((product) => (
+                    <TableRow key={`${product._id}+1`} className="capitalize ">
+                        {tableConfig[tableTitle]?.map((column) => (
+                            <TableCell key={column.key} className="hidden  md:table-cell capitalize">
+                                <Link href={`/dashboard/${tableTitle}/view/${product._id}`}>
+                                    {renderCellContent(product, column)}
                                 </Link>
-                                <DropdownMenuItem onClick={() => handleDeleteClick()}>
-                                    Delete
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
+                            </TableCell>
+                        ))}
+                        <TableCell>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Toggle menu</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <Link href={`/dashboard/${tableTitle}/${product._id}/update`}>
+                                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuItem className="cursor-pointer" onClick={() => onDeleteClick(product._id)}>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+
+        </>
     );
 };
 

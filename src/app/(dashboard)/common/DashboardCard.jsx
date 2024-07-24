@@ -20,9 +20,6 @@ const DashboardCard = ({ path, progressBar, icon: Icon, title, value, progress }
                                 +{progress}% from last week
                             </div>
                         </CardContent>
-                        {/* <CardFooter>
-                        <Progress  value={progress} aria-label={`${progress}% increase`} />
-                    </CardFooter> */}
                     </>
                 )}
             </Card>

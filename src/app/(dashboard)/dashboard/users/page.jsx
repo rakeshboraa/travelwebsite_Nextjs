@@ -27,7 +27,7 @@ const Page = () => {
   ]
 
   return (
-    <ListLayout tableTitle='user' TableBodyData={TableBodyData} TabHeaderList={TabHeaderList} headerTitle="Users" headerbuttontitle="Add New User" path="addNewUser" />
+    <ListLayout tableTitle='users' TableBodyData={TableBodyData} TabHeaderList={TabHeaderList} headerTitle="Users" headerbuttontitle="Add New User" path="addNewUser" />
   )
 }
 

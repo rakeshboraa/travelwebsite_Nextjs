@@ -1,10 +1,12 @@
 "use client"
 import React from 'react'
-import OfferForm from '../../../components/OfferForm'
+import ComboOfferForm from '@/app/(dashboard)/components/ComboOfferForm';
 const page = () => {
-    return (
-        <OfferForm isEditMode={true} />
-    )
+    const handleSave = (formData) => {
+        console.log("Updating combo offer:", formData);
+    };
+
+    return <ComboOfferForm initialData={"s"} onSave={handleSave} isEditMode />;
 }
 
 export default page

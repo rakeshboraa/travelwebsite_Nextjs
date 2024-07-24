@@ -66,6 +66,45 @@
   }
 }
 
+.custom-slider .rc-slider-track {
+  background-color: #000000;
+  /* Change track color */
+}
+
+.custom-slider .rc-slider-handle {
+  border-color: #000000;
+  /* Change handle border color */
+  background-color: #000000;
+  /* Change handle background color */
+}
+
+.custom-slider .rc-slider-handle:hover,
+.custom-slider .rc-slider-handle:focus {
+  border-color: #000000;
+  /* Change handle border color on hover/focus */
+}
+
+.custom-slider .rc-slider-handle:active {
+  border-color: #000000;
+  /* Change handle border color on active */
+}
+
+.custom-input {
+  width: 100%;
+  padding: 8px;
+  font-weight: 400;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 5px;
+  font-size: 14px;
+  color: black
+}
+.rmdp-container {
+  width: 100%;
+}
+.custom-input::placeholder {
+  color: rgb(94, 94, 94)
+}
+
 @layer base {
   * {
     @apply border-border;

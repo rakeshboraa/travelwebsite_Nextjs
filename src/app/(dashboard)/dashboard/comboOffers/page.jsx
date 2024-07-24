@@ -22,7 +22,7 @@ const Page = () => {
     },
   ]
   return (
-    <ListLayout tableTitle="combooffer" TabHeaderList={TabHeaderList} TableBodyData={TableBodyData} headerTitle="Combo Offers" headerbuttontitle="Add New Combo Offer" path="addComboOffers" />
+    <ListLayout tableTitle="comboOffers" TabHeaderList={TabHeaderList} TableBodyData={TableBodyData} headerTitle="Combo Offers" headerbuttontitle="Add New Combo Offer" path="addComboOffers" />
   )
 }
 

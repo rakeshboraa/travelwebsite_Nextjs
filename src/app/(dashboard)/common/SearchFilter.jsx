@@ -1,18 +1,55 @@
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
-import React from 'react'
+"use client"
+import { useEffect, useState } from 'react'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Input } from '@/components/ui/input';
 
-const SearchFilter = () => {
-    return (
-        <div className="relative ml-auto flex-2  ">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-                type="search"
-                placeholder="Search..."
-                className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-            />
-        </div>
-    )
+const SearchFilter = ({ placeholder = 'Search Activites...' }) => {
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query]);
+
+  useEffect(() => {
+    if (debouncedQuery !== undefined) {
+      let newUrl = '';
+
+      if (debouncedQuery) {
+        newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          key: 'query',
+          value: debouncedQuery
+        });
+      } else {
+        newUrl = removeKeysFromQuery({
+          params: searchParams.toString(),
+          keysToRemove: ['query']
+        });
+      }
+
+      router.push(newUrl, { scroll: false });
+    }
+  }, [debouncedQuery, searchParams, router]);
+
+  return (
+    <div className="flex-center min-h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
+      <Input 
+        type="text"
+        placeholder={placeholder}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+    </div>
+  );
 }
 
-export default SearchFilter
+export default SearchFilter;

@@ -1,24 +1,27 @@
 import ViewData from '@/app/(dashboard)/components/ViewData'
+import { getActivityById } from '@/lib/actions/activity.actions'
 import React from 'react'
 
-const page = () => {
-  const listTitles = ['title', 'description', 'location', 'categories', 'price', 'availability', 'inventory', 'createdby',]
-  const listData = [{
-    title: "updating",
-    description: 'demo description',
-    location: 'new demo location',
-    categories: 'demo category',
-    price: '324',
-    availability: 'yes',
-    inventory: 'demos',
-    createdby: 'dsah',
-    images:['https://res.cloudinary.com/dvjkkdby1/image/upload/v1719502991/xyn0e49dnscl7mf5m8eb.png','https://res.cloudinary.com/dvjkkdby1/image/upload/v1719502991/xyn0e49dnscl7mf5m8eb.png','https://res.cloudinary.com/dvjkkdby1/image/upload/v1719502991/xyn0e49dnscl7mf5m8eb.png']
-  }]
+const page = async ({ params: { id } }) => {
+  const activity = await getActivityById(id);
+
+  // Calculate the total availability count
+  const slots = activity.availability.length;
+
+  const listTitles = ['title', 'description', 'location', 'categories',  'price', 'availability', 'slots', 'inventory', 'createdby'];
+
   return (
     <div>
-      <ViewData headerTitle="Activity Details" listTitles={listTitles} listData={listData} />
+      <ViewData 
+        dataId={id} 
+        hasImages={true} 
+        headerTitle="Activity Details" 
+        listTitles={listTitles} 
+        listData={{ ...activity, slots }} 
+        path={'activities'} 
+      />
     </div>
   )
 }
 
-export default page
+export default page;

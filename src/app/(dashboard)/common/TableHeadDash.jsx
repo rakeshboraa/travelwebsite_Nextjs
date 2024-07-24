@@ -1,15 +1,12 @@
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import React from 'react'
 
-const TableHeadDash = ({TabHeaderList}) => {
+const TableHeadDash = ({ TabHeaderList }) => {
     return (
         <TableHeader>
             <TableRow>
-                {/* <TableHead className="hidden w-[100px] sm:table-cell">
-                    <span className="sr-only">Image</span>
-                </TableHead> */}
-                {TabHeaderList.map((e) => (
-                    <TableHead >{e}</TableHead>
+                {TabHeaderList.map((e,index) => (
+                    <TableHead key={index}>{e}</TableHead>
                 ))}
                 <TableHead>
                     <span className="sr-only">Actions</span>
