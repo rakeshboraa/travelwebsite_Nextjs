@@ -2,8 +2,8 @@
 import { connectToDatabase } from "../database"
 import activityModel from "../database/models/activity.model"
 import Category from "../database/models/category.model"
-import { handleError } from "../utils"
 import { revalidatePath } from 'next/cache'
+import { handleError } from "../utils"
 
 const getCategoryByName = async (name) => {
     return Category.findOne({ name: { $regex: name, $options: 'i' } })
@@ -100,11 +100,6 @@ export const getAllActivity = async ({ query, category, page, limit, minPrice, m
 
 
 
-
-
-
-
-
 export async function updateActivity({ activity }) {
     try {
         await connectToDatabase()
@@ -121,7 +116,6 @@ export async function updateActivity({ activity }) {
 }
 
 export async function deleteActivity({ activityId }) {
-    console.log(activityId)
     try {
         await connectToDatabase()
         await activityModel.findByIdAndDelete(activityId)

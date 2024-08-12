@@ -10,6 +10,7 @@ import Modal from '@/components/shared/Modal';
 import { useRouter } from 'next/navigation';
 import { deleteActivity } from '@/lib/actions/activity.actions';
 import { useToast } from '@/components/ui/use-toast';
+import CarouselImage from '@/components/shared/Caraouselmage';
 
 const ViewData = ({ listTitles, headerTitle, listData, path, hasImages, dataId }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -94,24 +95,11 @@ const ViewData = ({ listTitles, headerTitle, listData, path, hasImages, dataId }
           </div>
           {hasImages && (
             <div className="grid auto-rows-max gap-6">
-              <Card className="overflow-hidden bg-white shadow-lg rounded-lg">
+              <Card className="overflow-hidden justify-center flex py-5 items-center flex-col bg-white shadow-lg rounded-lg">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold">Images</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-3 gap-2">
-                    {listData?.imageUrls?.map((image, index) => (
-                      <Image
-                        key={index}
-                        alt="Product image"
-                        className="aspect-square w-full rounded-md object-cover"
-                        height="100"
-                        src={image}
-                        width="100"
-                      />
-                    ))}
-                  </div>
-                </CardContent>
+                <CarouselImage images={listData?.imageUrls} />
               </Card>
             </div>
           )}

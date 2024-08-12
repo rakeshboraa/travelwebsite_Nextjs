@@ -1,33 +1,34 @@
-import React from 'react'
-import NavItem from '../common/NavItem'
+import React from 'react';
+import NavItem from './NavItem';
 
-const SideNavItems = ({ navItems, footerNavItems }) => {
+const SideNavItems = ({ navItems, footerNavItems, showLabel }) => {
+   
     return (
-        <aside className="fixed h-screen start-0 left-0 z-10 hidden w-14 flex-col border-r bg-background transition-all duration-300 sm:flex">
-            <nav className="flex flex-col items-center gap-4 px-2 sm:py-5 " >
+        <div className='h-screen justify-between flex flex-col' >
+            <nav className="w-full  flex flex-col items-center gap-4 px-2 sm:py-5" >
                 {navItems.map((item, index) => (
                     <NavItem
+                        showLabel={showLabel}
                         key={index}
                         href={item.href}
                         icon={item.icon}
                         label={item.label}
-                        active={item.active}
                     />
                 ))}
             </nav>
-            <nav className="flex flex-col items-center  mt-[340px] gap-4 px-2 ">
+            <nav className="flex flex-col items-center  mb-[7rem] px-2">
                 {footerNavItems.map((item, index) => (
                     <NavItem
+                        showLabel={showLabel}
                         key={index}
                         href={item.href}
                         icon={item.icon}
                         label={item.label}
-                        active={item.active}
                     />
                 ))}
             </nav>
-        </aside>
-    )
-}
+        </div>
+    );
+};
 
-export default SideNavItems
+export default SideNavItems;

@@ -1,31 +1,26 @@
+import { getallCategories } from "@/lib/actions/category.action";
 import ListLayout from "../../components/ListLayout";
 
-const Page = () => {
-  const TabHeaderList = ['Name', 'Description', 'Slug', 'Actions']
-  const TableBodyData = [
-    {
-      name: 'demosasdasdasdasdasd name',
-      description: 'demo Company',
-      slug: 'Email@gmail.com',
-    },
-    {
-      name: 'demosasdasdasdasdasd name',
-      description: 'demo Company',
-      slug: 'Email@gmail.com',
-    },
-  ]
+const Page = async () => {
+  let response = [];
+  try {
+    response = await getallCategories();
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+  }
+
+  const TabHeaderList = ['Name', 'Description', 'Slug', 'Actions'];
+
   return (
-    <ListLayout tableTitle='category' TabHeaderList={TabHeaderList} TableBodyData={TableBodyData} headerTitle="Categories" headerbuttontitle="Add New Category" path="addNewCategory" />
-  )
-}
+    <ListLayout 
+      tableTitle='category' 
+      TabHeaderList={TabHeaderList} 
+      TableBodyData={response} 
+      headerTitle="Categories" 
+      headerbuttontitle="Add New Category" 
+      path="addNewCategory" 
+    />
+  );
+};
 
 export default Page;
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,33 +8,29 @@ import { ActivityformSchema } from "@/lib/validators";
 import { activityDefaultValues } from "@/constants";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import Dropdown from "@/components/shared/MultiSelectDropdown";
 import { useState } from "react";
 import { createActivity, updateActivity } from "@/lib/actions/activity.actions";
-import { useUploadThing } from "@/lib/uploadthing";
+import axios from "axios"; // Ensure axios is imported
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import FileUploader from "@/components/shared/FileUploder";
 import Loading from "../dashboard/loading";
 import MultiSelectDropdown from "@/components/shared/MultiSelectDropdown";
 import MultiDateSelector from "@/components/shared/MultiDateSelector";
+import FileUploader from "@/components/shared/FileUploder";
 
 const ActivityForm = ({ activity, activityId, type }) => {
   const { toast } = useToast();
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const initialValues = activity && type === 'Update'
-    ? {
-      ...activity,
-    }
+    ? { ...activity }
     : activityDefaultValues;
+  
   const form = useForm({
     resolver: zodResolver(ActivityformSchema),
     defaultValues: initialValues
   });
-  const { startUpload } = useUploadThing('imageUploader', {
-    multiple: true
-  });
+
   const router = useRouter();
 
   const handleToast = (message) => {
@@ -50,15 +46,26 @@ const ActivityForm = ({ activity, activityId, type }) => {
     let uploadedImageUrls = values.imageUrls;
 
     if (files.length > 0) {
-      const uploadedImages = await startUpload(files);
-      if (!uploadedImages) {
-        setLoading(false);
-        return;
-      }
-      uploadedImageUrls = uploadedImages.map(image => image.url);
-    }
-    if (type === 'Create') {
       try {
+        const uploadedImages = await Promise.all(
+          files.map(async (file) => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'phzdvggz'); 
+            const response = await axios.post('https://api.cloudinary.com/v1_1/dytpruv1e/image/upload', formData); // Replace with your Cloudinary cloud name
+            return response.data.secure_url;
+          })
+        );
+        uploadedImageUrls = uploadedImages;
+      } catch (error) {
+        console.error("Error uploading images:", error);
+        setLoading(false);
+        return; 
+      }
+    }
+
+    try {
+      if (type === 'Create') {
         const newActivity = await createActivity({
           activity: { ...values, imageUrls: uploadedImageUrls },
         });
@@ -67,20 +74,13 @@ const ActivityForm = ({ activity, activityId, type }) => {
           handleToast("Activity Added Successfully");
           router.push('/dashboard/activities');
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (type === 'Update') {
-      if (!activityId) {
-        router.back();
-        setLoading(false); // Set loading to false if no activityId
-        return;
-      }
+      } else if (type === 'Update') {
+        if (!activityId) {
+          router.back();
+          setLoading(false);
+          return;
+        }
 
-      try {
         const updatedEvent = await updateActivity({
           activity: { ...values, imageUrls: uploadedImageUrls, activityId },
         });
@@ -88,16 +88,16 @@ const ActivityForm = ({ activity, activityId, type }) => {
           handleToast("Activity Updated Successfully");
           router.push('/dashboard/activities');
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
       }
+    } catch (error) {
+      console.error("Error saving activity:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <Form {...form} >
+    <Form {...form}>
       {loading ? <Loading /> :
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-[30px] grid flex-1 mt-4 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
@@ -238,7 +238,7 @@ const ActivityForm = ({ activity, activityId, type }) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <FileUploader onFieldChange={field.onChange} imageUrls={field.value || []} setFiles={setFiles} />
+                          <FileUploader files={files} onFieldChange={field.onChange} imageUrls={field.value || []} setFiles={setFiles} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

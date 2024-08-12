@@ -9,9 +9,9 @@ const DashboardCard = ({ path, progressBar, icon: Icon, title, value, progress }
                 <CardHeader className="pb-2">
                     <div className={`flex gap-3 items-center ${progressBar ? "" : "justify-center flex-col"}`}>
                         <Icon className="text-primary group-hover:text-white" />
-                        <h1 className="font-bold text-[18px]">{title}</h1>
+                        <h1 className="font-bold text-[16px]">{title}</h1>
                     </div>
-                    <CardTitle className="text-4xl">{value}</CardTitle>
+                    <CardTitle className="text-3xl">{value}</CardTitle>
                 </CardHeader>
                 {progressBar && (
                     <>

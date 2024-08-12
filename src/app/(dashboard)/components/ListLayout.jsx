@@ -10,6 +10,7 @@ import SearchFilter from "../common/SearchFilter";
 import ProductsButtons from "../common/ProductsButtons";
 import Modal from '@/components/shared/Modal';
 import { deleteActivity } from '@/lib/actions/activity.actions';
+import { deleteCategory } from '@/lib/actions/category.action'; // Import the deleteCategory function
 import { useToast } from '@/components/ui/use-toast';
 import CategoryFilter from '@/components/shared/CategoryFilter';
 import PriceFilter from '@/components/shared/PriceFilter';
@@ -36,10 +37,14 @@ const ListLayout = ({ maximumPrice, TabHeaderList, headerTitle, headerbuttontitl
   const handleConfirmDelete = async () => {
     setLoading(true);
     try {
-      await deleteActivity({ activityId: itemToDelete });
+      if (tableTitle === 'category') {
+        await deleteCategory({ categoryId: itemToDelete });
+      } else {
+        await deleteActivity({ activityId: itemToDelete });
+      }
       handleToast();
     } catch (error) {
-      console.log('Error deleting activity:', error);
+      console.log(`Error deleting ${tableTitle}:`, error);
     } finally {
       setIsDeleteModalOpen(false);
       setLoading(false);
@@ -61,7 +66,7 @@ const ListLayout = ({ maximumPrice, TabHeaderList, headerTitle, headerbuttontitl
           </div>
           {(!TableBodyData?.length) ? <span className=' w-full flex h-[40vh]  text-[20px] justify-center items-center'>No data found!</span> :
             <Table>
-              <TableHeadDash title='category' TabHeaderList={TabHeaderList} />
+              <TableHeadDash title={tableTitle} TabHeaderList={TabHeaderList} />
               <TableBodyCommon
                 tableTitle={tableTitle}
                 title={tableTitle}

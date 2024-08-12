@@ -1,6 +1,6 @@
 "use client"
-import React from 'react'
-import { Home, Rss , Package, TableProperties, Settings, LucideActivity, DollarSign, TicketCheck,  Users, TicketPercentIcon, BadgePercent, } from "lucide-react"
+import React, { useState } from 'react'
+import { Home, Rss, Package, TableProperties, Settings, LucideActivity, DollarSign, TicketCheck, Users, TicketPercentIcon, BadgePercent, } from "lucide-react"
 import SideNavItems from '../common/SideNavItems'
 
 const navItems = [
@@ -48,7 +48,7 @@ const navItems = [
     },
     {
         href: "/dashboard/blogs",
-        icon: Rss ,
+        icon: Rss,
         label: "Blogs",
         active: true
     },
@@ -58,7 +58,7 @@ const navItems = [
         label: "Categories",
         active: true
     },
-  
+
 ]
 
 const footerNavItems = [
@@ -71,9 +71,19 @@ const footerNavItems = [
 ]
 
 const Sidenav = () => {
+    const [hoveredIndex, setHoveredIndex] = useState(false);
+
+    const handleMouseEnter = (index) => {
+        setHoveredIndex(true);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredIndex(false);
+    };
+
     return (
-        <div>
-            <SideNavItems navItems={navItems} footerNavItems={footerNavItems} />
+        <div className='w-full h-full flex items-center' onMouseLeave={handleMouseLeave} onMouseEnter={handleMouseEnter}>
+            <SideNavItems showLabel={hoveredIndex}  navItems={navItems} footerNavItems={footerNavItems} />
         </div>
     )
 }

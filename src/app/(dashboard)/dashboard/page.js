@@ -1,8 +1,7 @@
 "use client"
-import React from 'react'
-import { BookOpenCheck, CirclePlus, Contact, Eye, MessageSquareWarning, ShieldCheck, SquareActivity, Users, Wallet } from "lucide-react"
-import DashboardCard from '../common/DashboardCard'
-import RecentActivityFeed from '../components/RecentActivityFeed'
+import { BookOpenCheck, CirclePlus, Contact, Eye, MessageSquareWarning, ShieldCheck, SquareActivity, Users, Wallet } from "lucide-react";
+import DashboardCard from "../common/DashboardCard";
+import RecentActivityFeed from "../components/RecentActivityFeed";
 
 const page = () => {
 

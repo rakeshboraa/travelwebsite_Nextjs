@@ -1,10 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
 import { deleteActivity } from '@/lib/actions/activity.actions'
-import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 
 export const DeleteConfirmation = ({ activityId }) => {
@@ -15,7 +11,7 @@ export const DeleteConfirmation = ({ activityId }) => {
         setIsLoading(true)
         try {
             await deleteActivity({ activityId })
-            setIsOpen(false) // Close the dialog on successful deletion
+            setIsOpen(false) 
         } catch (error) {
             console.log('Error deleting activity:', error)
         } finally {

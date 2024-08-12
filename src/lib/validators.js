@@ -14,3 +14,10 @@ export const CategoryformSchema = z.object({
     description: z.string().min(3, 'Description must be at least 3 characters').max(400, 'Description must be less than 400 characters'),
     slug: z.string().min(3, 'Title must be at least 3 characters'),
 })
+
+export const RegisterFormSchema = z.object({
+    firstname: z.string().min(1, "First name is required"),
+    lastname: z.string().min(1, "Last name is required"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  });

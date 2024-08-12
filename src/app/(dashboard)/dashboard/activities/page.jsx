@@ -26,6 +26,7 @@ const Page = async ({ searchParams }) => {
                 availability: act.availability.length 
             }));
         }
+        
     } catch (error) {
         console.error("Failed to fetch activities:", error);
     }

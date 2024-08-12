@@ -1,6 +1,6 @@
-import ViewData from '@/app/(dashboard)/components/ViewData'
-import { getActivityById } from '@/lib/actions/activity.actions'
-import React from 'react'
+import ViewData from "@/app/(dashboard)/components/ViewData";
+import { getActivityById } from "@/lib/actions/activity.actions";
+
 
 const page = async ({ params: { id } }) => {
   const activity = await getActivityById(id);

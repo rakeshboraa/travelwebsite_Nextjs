@@ -1,6 +1,6 @@
-import ActivityForm from '@/app/(dashboard)/components/ActivityForm';
-import { getActivityById } from '@/lib/actions/activity.actions';
-import React from 'react'
+import ActivityForm from "@/app/(dashboard)/components/ActivityForm";
+import { getActivityById } from "@/lib/actions/activity.actions";
+
 
 const page = async ({ params: { id } }) => {
   const activity = await getActivityById(id)

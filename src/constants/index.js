@@ -14,3 +14,10 @@ export const categoryDefaultValues = {
     description: '',
     slug: ''
 }
+
+export const registerDefaultValues = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+  };

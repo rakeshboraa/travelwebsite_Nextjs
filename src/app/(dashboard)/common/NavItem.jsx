@@ -1,24 +1,26 @@
 import Link from 'next/link'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import React from 'react'
+import { usePathname } from 'next/navigation'
 
-const NavItem = ({ href, icon: Icon, label, active }) => {
+const NavItem = ({ href, icon: Icon, label, showLabel }) => {
+    const pathname = usePathname()
+    const isActive = pathname === href
+
     return (
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild >
-                    <Link
-                        href={href}
-                        className={`flex h-9 w-auto items-center bg-white justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
-                            active ? 'bg-accent text-accent-foreground' : 'text-muted-foreground'
-                        }`}
-                    >
-                        <Icon className="h-5 w-5" />
-                    </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="w-full ">{label}</TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <Link
+            href={href}
+            className={`flex items-center rounded-lg transition-colors duration-300 
+                ${isActive ? 'bg-gray-200 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-100 hover:shadow-md'} 
+                ${showLabel ? 'py-2 px-4' : 'py-2 px-3'}
+                w-full`}
+        >
+            <Icon className="h-5 w-5" />
+            {showLabel && (
+                <span className={`ml-3 text-sm ${isActive ? 'text-gray-900' : 'text-gray-700'}`}>
+                    {label}
+                </span>
+            )}
+        </Link>
     )
 }
 

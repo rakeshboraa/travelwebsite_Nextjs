@@ -20,8 +20,6 @@ const CategoryFilter = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    if (error) return <div>Error loading categories.</div>;
-
     const onSelectCategory = (category) => {
         let newUrl = '';
         if (category && category !== 'All') {
